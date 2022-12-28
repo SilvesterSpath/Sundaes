@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import SummeryForm from '../SummaryForm';
+import SummeryForm from '../SummaryForm.jsx';
 
 test('checkbox is unchecked by default', () => {
   render(<SummeryForm />);
   const checkbox = screen.getByRole('checkbox', {
-    name: /i agree to/i,
+    name: /terms and conditions/i,
   });
 
   const buttonEl = screen.getByRole('button', { name: /confirm order/i });
@@ -18,7 +18,7 @@ test('checking checkbox enables button, unchecking disables', () => {
   render(<SummeryForm />);
 
   const checkbox = screen.getByRole('checkbox', {
-    name: /i agree to/i,
+    name: /terms and conditions/i,
   });
 
   const buttonEl = screen.getByRole('button', { name: /confirm order/i });
