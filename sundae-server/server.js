@@ -4,14 +4,26 @@ const fs = require('fs');
 
 const app = express();
 
+/* // Add Access Control Allow Origin headers for CORS
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+}); */
+
 // CORS for react app, assuming port 3000
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}))
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 // use middleware to serve static images
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 // read data from options file
 const sundaeOptionsRaw = fs.readFileSync('./sundae-options.json', 'utf-8');
@@ -19,13 +31,13 @@ const sundaeOptions = JSON.parse(sundaeOptionsRaw);
 
 app.get('/scoops', (req, res) => {
   // return data from file
-  res.json(sundaeOptions.iceCreamFlavors)
-})
+  res.json(sundaeOptions.iceCreamFlavors);
+});
 
 app.get('/toppings', (req, res) => {
   // return data from file
-  res.json(sundaeOptions.toppings)
-})
+  res.json(sundaeOptions.toppings);
+});
 
 app.post('/order', (req, res) => {
   // create a random order number
@@ -36,11 +48,11 @@ app.post('/order', (req, res) => {
     .status(201)
 
     // return "order number" as the response
-    .json({ orderNumber })
-})
+    .json({ orderNumber });
+});
 
 if (require.main === module) {
-  app.listen(3030, () => console.log('Sundae server listening on port 3030!'))
+  app.listen(3030, () => console.log('Sundae server listening on port 3030!'));
 }
 
 module.exports = app;
