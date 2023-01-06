@@ -1,7 +1,13 @@
 import React from 'react';
+import Options from './Options';
 
 const OrderEntry = () => {
-  return <div>OrderEntry</div>;
+  return (
+    <>
+      <Options optionType='scoops' />
+      <Options optionType='toppings' />
+    </>
+  );
 };
 
 export default OrderEntry;
