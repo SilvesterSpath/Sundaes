@@ -12,14 +12,12 @@ export default function Options({ optionType }) {
 
   // optionType is 'scoops' or 'toppings'
   useEffect(() => {
-    /*     axios
+    axios
       .get(`http://localhost:3030/${optionType}`)
       .then((res) => setItems(res.data))
-      .catch((error) => {
-        console.log(error);
-      }) */
+      .catch((error) => setError(true));
 
-    async function fetchData() {
+    /*     async function fetchData() {
       try {
         const res = await axios.get(`http://localhost:3030/${optionType}`);
         setItems(res.data);
@@ -29,7 +27,7 @@ export default function Options({ optionType }) {
       }
     }
 
-    fetchData();
+    fetchData(); */
   }, [optionType]);
 
   if (error) {
