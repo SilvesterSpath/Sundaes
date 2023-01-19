@@ -61,5 +61,6 @@ export function OrderDetailsProvider(props) {
   };
 
   const value = { optionCounts, totals, updateItemCount, resetOrder };
+
   return <OrderDetails.Provider value={value} {...props} />;
 }
