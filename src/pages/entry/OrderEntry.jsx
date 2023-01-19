@@ -1,4 +1,5 @@
 import React from 'react';
+import OrderSummary from '../summary/OrderSummary';
 import Options from './Options';
 
 const OrderEntry = () => {
@@ -6,6 +7,7 @@ const OrderEntry = () => {
     <>
       <Options optionType='scoops' />
       <Options optionType='toppings' />
+      <OrderSummary />
     </>
   );
 };
