@@ -15,8 +15,6 @@ export default function Options({ optionType }) {
 
   const { totals } = useOrderDetails();
 
-  console.log(totals);
-
   // optionType is 'scoops' or 'toppings'
   useEffect(() => {
     axios
