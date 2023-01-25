@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 // No longer necessary because of importing from testing-library-utils
 /* import { OrderDetailsProvider } from '../../../contexts/OrderDetails'; */
 import Options from '../Options';
+import OrderEntry from '../OrderEntry';
 
 test('update scoop subtotal when scoops change', async () => {
   const user = userEvent.setup();
@@ -65,4 +66,70 @@ test('update toppings subtotal when toppings change', async () => {
   // remove Erdbeere and check subtotal
   await user.click(erdbeereCheckbox);
   expect(toppingsSubtotal).toHaveTextContent('1.50');
+});
+
+describe('grand total', () => {
+  test('grand total start at $0.00', () => {
+    render(<OrderEntry />);
+
+    const grandTotal = screen.getByRole('heading', { name: /grand total/i });
+    expect(grandTotal).toHaveTextContent('0.00');
+  });
+
+  test('grand total updates properly if scoop is added first', async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+
+    const grandTotal = screen.getByRole('heading', { name: /grand total/i });
+    render(<Options optionType='scoops' />);
+
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: /vanilla/i,
+    });
+
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, '1');
+
+    expect(grandTotal).toHaveTextContent('2.00');
+  });
+
+  test('grand total updates properly if topping is added first', async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+    const grandTotal = screen.getByRole('heading', { name: /grand total/i });
+
+    render(<Options optionType='toppings' />);
+    const erdbeereCheckbox = await screen.findByRole('checkbox', {
+      name: /erdbeere/i,
+    });
+
+    await user.click(erdbeereCheckbox);
+    expect(grandTotal).toHaveTextContent('1.50');
+  });
+  test('grand total updates properly if an item is removed', async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+    const grandTotal = screen.getByRole('heading', { name: /grand total/i });
+
+    render(<Options optionType='toppings' />);
+    const erdbeereCheckbox = await screen.findByRole('checkbox', {
+      name: /erdbeere/i,
+    });
+
+    render(<Options optionType='scoops' />);
+
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: /vanilla/i,
+    });
+
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, '1');
+
+    await user.click(erdbeereCheckbox);
+    expect(grandTotal).toHaveTextContent('3.50');
+
+    await user.click(erdbeereCheckbox);
+
+    expect(grandTotal).toHaveTextContent('2.00');
+  });
 });

@@ -1,13 +1,16 @@
 import React from 'react';
-import OrderSummary from '../summary/OrderSummary';
 import Options from './Options';
+import { useOrderDetails } from '../../contexts/OrderDetails';
+import { formatCurrency } from '../../utilities';
 
 const OrderEntry = () => {
+  const { grand_total } = useOrderDetails();
+
   return (
     <>
       <Options optionType='scoops' />
       <Options optionType='toppings' />
-      <OrderSummary />
+      <h2>Grand total: {formatCurrency(grand_total)}</h2>
     </>
   );
 };
