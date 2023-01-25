@@ -1,4 +1,8 @@
-import { render, screen } from '../../../test-utils/testing-library-utils';
+import {
+  cleanup,
+  render,
+  screen,
+} from '../../../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 // No longer necessary because of importing from testing-library-utils
 /* import { OrderDetailsProvider } from '../../../contexts/OrderDetails'; */
@@ -69,13 +73,16 @@ test('update toppings subtotal when toppings change', async () => {
 });
 
 describe('grand total', () => {
-  test('grand total start at $0.00', () => {
-    render(<OrderEntry />);
+  test.only('grand total start at $0.00', () => {
+    const { unmount } = render(<OrderEntry />);
 
     const grandTotal = screen.getByRole('heading', {
       name: /grand total: \$/i,
     });
+
     expect(grandTotal).toHaveTextContent('0.00');
+    unmount();
+    /* cleanup(<OrderEntry />); */
   });
 
   test('grand total updates properly if scoop is added first', async () => {
