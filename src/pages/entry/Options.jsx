@@ -19,12 +19,24 @@ export default function Options({ optionType }) {
   useEffect(() => {
     // create an abortController to attach a network request
     const controller = new AbortController();
-    axios
+    /*     axios
       .get(`http://localhost:3030/${optionType}`, { signal: controller.signal })
       .then((res) => setItems(res.data))
       .catch((err) => {
         if (err.name !== 'CanceledError') setError(true);
-      });
+      }); */
+    async function fetchData() {
+      try {
+        const res = await axios.get(`http://localhost:3030/${optionType}`);
+        console.log(res);
+        setItems(res.data);
+      } catch (error) {
+        if (error.name !== 'CanceledError') setError(true);
+        console.log(error);
+      }
+    }
+
+    fetchData();
 
     // abort axios call on component unmount
     return () => {
