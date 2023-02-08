@@ -31,7 +31,7 @@ app.get('/toppings', (req, res) => {
 
 app.post('/order', (req, res) => {
   // create a random order number
-  const orderNumber = Math.floor(Math.random() * 10000000000);
+  const orderNumber = Math.floor(Math.random() * 1000000);
 
   res
     // set status to 201 (created)
