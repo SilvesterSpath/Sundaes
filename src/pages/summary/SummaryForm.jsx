@@ -4,8 +4,12 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 
-const SummaryForm = () => {
+const SummaryForm = ({ setOrderPhase }) => {
   const [tcChecked, setTcChecked] = useState(false);
+
+  const handleClick = () => {
+    setOrderPhase('completed');
+  };
 
   const popover = (
     <Popover id='popover-basic'>
@@ -34,7 +38,12 @@ const SummaryForm = () => {
         />
       </Form.Group>
 
-      <Button variant='primary' type='submit' disabled={!tcChecked}>
+      <Button
+        variant='primary'
+        type='submit'
+        disabled={!tcChecked}
+        onClick={handleClick}
+      >
         Confirm Order
       </Button>
     </Form>

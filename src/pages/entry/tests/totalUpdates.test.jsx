@@ -1,6 +1,6 @@
 import { render, screen } from '../../../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
-// No longer necessary because of importing from testing-library-utils
+// No longer necessary because we import render from testing-library-utils
 /* import { OrderDetailsProvider } from '../../../contexts/OrderDetails'; */
 import Options from '../Options';
 import OrderEntry from '../OrderEntry';
