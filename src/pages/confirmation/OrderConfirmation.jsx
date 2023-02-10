@@ -10,17 +10,26 @@ const OrderConfirmation = ({ setOrderPhase }) => {
   const { resetOrder } = useOrderDetails();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const getOrderDetails = async () => {
       try {
-        const orderDetails = await axios.post('http://localhost:3030/order');
+        const orderDetails = await axios.post('http://localhost:3030/order', {
+          signal: controller.signal,
+        });
 
         setOrderNumber(orderDetails.data.orderNumber);
       } catch (error) {
-        setError(error);
+        if (error.name !== 'CanceledError') setError(true);
       }
     };
 
     getOrderDetails();
+
+    // abort axios call on component unmount
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const handleClick = () => {

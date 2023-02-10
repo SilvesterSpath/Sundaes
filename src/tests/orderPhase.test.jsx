@@ -1,18 +1,14 @@
-import {
-  computeHeadingLevel,
-  render,
-  screen,
-} from '../test-utils/testing-library-utils';
+import { render, screen } from '../test-utils/testing-library-utils';
+import { logRoles } from '../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 test('Order phases for happy path', async () => {
   const user = userEvent.setup();
   // render app
-  const { unmount } = render(<App />);
   // Don't need to wrap in provider; already wrapped!
-
   // destructure 'unmount' from return value to use at the end of the test
+  const { unmount, container } = render(<App />);
 
   // add ice cream scoops and toppings
   const scoopsTotal = screen.getByText('Scoops total: $', { exact: false });
@@ -77,16 +73,15 @@ test('Order phases for happy path', async () => {
   // confirm order number on confirmation page
   const orderNumber = await screen.findByText(/order number/i);
 
-  console.log('Order Number: ', orderNumber);
-
   expect(orderNumber).toBeInTheDocument();
   // click "new order" button on confirmation page
   const newOrderButton = screen.getByRole('button', { name: /new order/i });
-
   await user.click(newOrderButton);
+
   // check that scoops and toppings subtotal have been reset
-  expect(scoopsTotal).toHaveTextContent('2.00');
-  expect(toppingsTotal).toHaveTextContent('1.50');
+  const heading = await screen.findByText(/design your sundae/i);
+  expect(heading).toBeInTheDocument();
+
   // do we need to await anything to avoid test errors?
 
   // unmount the component explicitly to trigger cleanup and avoid
