@@ -4,7 +4,6 @@ import Container from 'react-bootstrap/Container';
 import OrderEntry from './pages/entry/OrderEntry';
 import { OrderDetailsProvider } from './contexts/OrderDetails';
 import OrderSummary from './pages/summary/OrderSummary';
-import SummaryForm from './pages/summary/SummaryForm';
 import OrderConfirmation from './pages/confirmation/OrderConfirmation';
 
 function App() {
@@ -19,7 +18,7 @@ function App() {
         ) : orderPhase === 'review' ? (
           <OrderSummary setOrderPhase={setOrderPhase} />
         ) : orderPhase === 'completed' ? (
-          <OrderConfirmation />
+          <OrderConfirmation setOrderPhase={setOrderPhase} />
         ) : null}
       </OrderDetailsProvider>
       {/* Confirmation page does not need provider */}

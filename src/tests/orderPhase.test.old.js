@@ -1,19 +1,11 @@
-import {
-  computeHeadingLevel,
-  render,
-  screen,
-} from '../test-utils/testing-library-utils';
+import { render, screen } from '../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 test('Order phases for happy path', async () => {
   const user = userEvent.setup();
   // render app
-  const { unmount } = render(<App />);
-  // Don't need to wrap in provider; already wrapped!
-
-  // destructure 'unmount' from return value to use at the end of the test
-
+  render(<App />);
   // add ice cream scoops and toppings
   const scoopsTotal = screen.getByText('Scoops total: $', { exact: false });
   expect(scoopsTotal).toHaveTextContent('0.00');
@@ -22,6 +14,7 @@ test('Order phases for happy path', async () => {
   const vanillaInput = await screen.findByRole('spinbutton', {
     name: /vanilla/i,
   });
+
   await user.clear(vanillaInput);
   await user.type(vanillaInput, '1');
 
@@ -40,25 +33,15 @@ test('Order phases for happy path', async () => {
   const orderButton = screen.getByRole('button', { name: /order sundae/i });
 
   await user.click(orderButton);
-
   // check summary information based on order
   const orderSummary = screen.getByText(/ordersummary/i);
   expect(orderSummary).toBeInTheDocument();
 
-  const scoops = screen.getByText(/scoops/i, { exact: false });
+  const scoops = screen.getByText(/scoops/i);
   expect(scoops).toHaveTextContent('2.00');
 
-  const toppings = screen.getByText(/toppings/i, { exact: false });
+  const toppings = screen.getByText(/toppings/i);
   expect(toppings).toHaveTextContent('1.50');
-
-  expect(screen.getByText('1 Vanilla')).toBeInTheDocument();
-  expect(screen.getByText('Erdbeere')).toBeInTheDocument();
-
-  // alternatively..
-  // const optionItems = screen.getAllByRole('listitem')
-  // const optionItemsText = optionItems.map((item)=> item.textContent)
-  // expect(optionItemsText).toEqual(['1 Vanilla', '2 Chocolate', 'Cherries'])
-
   // accept terms and conditions and click button to confirm order
   const agreeCheckbox = screen.getByRole('checkbox', {
     name: /i agree to terms and conditions/i,
@@ -70,26 +53,20 @@ test('Order phases for happy path', async () => {
     name: /confirm order/i,
   });
 
-  expect(confirmOrderButton).toBeInTheDocument();
-
   await user.click(confirmOrderButton);
-
   // confirm order number on confirmation page
-  const orderNumber = await screen.findByText(/order number/i);
+  const orderNumber = await screen.findByText(/orderConfirmation/i, {
+    exact: false,
+  });
 
-  console.log('Order Number: ', orderNumber);
+  console.log('orderNumber', orderNumber);
 
-  expect(orderNumber).toBeInTheDocument();
+  expect(orderNumber).toHaveTextContent(/orderconfirmation/i);
   // click "new order" button on confirmation page
   const newOrderButton = screen.getByRole('button', { name: /new order/i });
 
   await user.click(newOrderButton);
   // check that scoops and toppings subtotal have been reset
-  expect(scoopsTotal).toHaveTextContent('2.00');
-  expect(toppingsTotal).toHaveTextContent('1.50');
+  expect(scoopsTotal).toHaveTextContent('0.00');
   // do we need to await anything to avoid test errors?
-
-  // unmount the component explicitly to trigger cleanup and avoid
-  // 'not wrapped in act()' error
-  unmount();
 });

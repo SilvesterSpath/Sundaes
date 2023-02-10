@@ -17,7 +17,7 @@ export default function Options({ optionType }) {
 
   // optionType is 'scoops' or 'toppings'
   useEffect(() => {
-    // create an abortController to attach a network request
+    // create an abortController to attach to network request
     const controller = new AbortController();
     /*     axios
       .get(`http://localhost:3030/${optionType}`, { signal: controller.signal })
@@ -27,12 +27,13 @@ export default function Options({ optionType }) {
       }); */
     async function fetchData() {
       try {
-        const res = await axios.get(`http://localhost:3030/${optionType}`);
-        console.log(res);
+        const res = await axios.get(`http://localhost:3030/${optionType}`, {
+          signal: controller.signal,
+        });
+
         setItems(res.data);
       } catch (error) {
         if (error.name !== 'CanceledError') setError(true);
-        console.log(error);
       }
     }
 

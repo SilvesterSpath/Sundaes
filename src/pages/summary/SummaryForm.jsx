@@ -7,7 +7,8 @@ import Popover from 'react-bootstrap/Popover';
 const SummaryForm = ({ setOrderPhase }) => {
   const [tcChecked, setTcChecked] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault();
     setOrderPhase('completed');
   };
 
