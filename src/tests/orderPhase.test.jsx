@@ -82,6 +82,12 @@ test('Order phases for happy path', async () => {
   const heading = await screen.findByText(/design your sundae/i);
   expect(heading).toBeInTheDocument();
 
+  const scoopsTotal2 = await screen.findByText(/scoops total/i);
+  expect(scoopsTotal2).toHaveTextContent('0.00');
+
+  const toppingsTotal2 = await screen.findByText(/toppings total/i);
+  expect(toppingsTotal2).toHaveTextContent('0.00');
+
   // do we need to await anything to avoid test errors?
 
   // unmount the component explicitly to trigger cleanup and avoid
