@@ -1,5 +1,4 @@
 import { render, screen } from '../test-utils/testing-library-utils';
-import { logRoles } from '../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
@@ -8,7 +7,7 @@ test('Order phases for happy path', async () => {
   // render app
   // Don't need to wrap in provider; already wrapped!
   // destructure 'unmount' from return value to use at the end of the test
-  const { unmount, container } = render(<App />);
+  const { unmount } = render(<App />);
 
   // add ice cream scoops and toppings
   const scoopsTotal = screen.getByText('Scoops total: $', { exact: false });
