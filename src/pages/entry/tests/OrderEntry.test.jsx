@@ -18,7 +18,7 @@ test.only('handels error for scoops and toppings routes', async () => {
     })
   );
 
-  render(<OrderEntry />);
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
 
   // to get all 'alert' we can use waitFor(async ()=>{})
   await waitFor(async () => {
