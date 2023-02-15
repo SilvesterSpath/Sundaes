@@ -69,6 +69,20 @@ test('Order phases for happy path', async () => {
 
   await user.click(confirmOrderButton);
 
+  // Expect "loading" to show
+  const loading = screen.getByText(/loading/i);
+  expect(loading).toBeInTheDocument();
+
+  // Check confirmation page text
+  // this one is async because there is a POST request to server in between summary
+  // and confirmation pages
+  const thankYouHeader = await screen.findByText(/thank you/i);
+  expect(thankYouHeader).toBeInTheDocument();
+
+  // expect that "loading" has dissapeared
+  const notLoading = screen.queryByText('loading');
+  expect(notLoading).not.toBeInTheDocument();
+
   // confirm order number on confirmation page
   const orderNumber = await screen.findByText(/order number/i);
 

@@ -33,12 +33,14 @@ app.post('/order', (req, res) => {
   // create a random order number
   const orderNumber = Math.floor(Math.random() * 1000000);
 
+  /*   setTimeout(() => { */
   res
     // set status to 201 (created)
     .status(201)
 
     // return "order number" as the response
     .json({ orderNumber });
+  /*   }, 2000); */
 });
 
 if (require.main === module) {

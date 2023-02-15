@@ -24,7 +24,9 @@ const OrderConfirmation = ({ setOrderPhase }) => {
       }
     };
 
-    getOrderDetails();
+    setTimeout(() => {
+      getOrderDetails();
+    }, 500);
 
     // abort axios call on component unmount
     return () => {
@@ -41,13 +43,17 @@ const OrderConfirmation = ({ setOrderPhase }) => {
     return <AlertBanner />;
   }
 
-  return (
-    <>
-      <h1>Thank you</h1>
-      <p>Order Number: {orderNumber}</p>
-      <button onClick={handleClick}>New Order</button>
-    </>
-  );
+  if (orderNumber) {
+    return (
+      <>
+        <h1>Thank you</h1>
+        <p>Order Number: {orderNumber}</p>
+        <button onClick={handleClick}>New Order</button>
+      </>
+    );
+  } else {
+    return <div>Loading..</div>;
+  }
 };
 
 export default OrderConfirmation;
