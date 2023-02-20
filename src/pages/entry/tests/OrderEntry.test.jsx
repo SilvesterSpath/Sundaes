@@ -7,7 +7,7 @@ import OrderEntry from '../OrderEntry';
 import { rest } from 'msw';
 import { server } from '../../../mocks/server';
 
-test.only('handels error for scoops and toppings routes', async () => {
+test('handels error for scoops and toppings routes', async () => {
   // overriding the actual handlers with error responses
   server.resetHandlers(
     rest.get('http://localhost:3030/scoops', (req, res, ctx) =>
@@ -28,4 +28,15 @@ test.only('handels error for scoops and toppings routes', async () => {
     ); */
     expect(alerts).toHaveLength(2);
   });
+});
+
+test('disable order button if no scoops', () => {
+  // because of typescipt I should add the props to <OrderEntry />
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
+
+  const scoops_total = screen.getByText(/scoops total/i);
+  expect(scoops_total).toHaveTextContent('0.00');
+
+  const orderButton = screen.getByRole('button', { name: /order sundae/i });
+  expect(orderButton).toBeDisabled();
 });

@@ -80,7 +80,7 @@ test('Order phases for happy path', async () => {
   expect(thankYouHeader).toBeInTheDocument();
 
   // expect that "loading" has dissapeared
-  const notLoading = screen.queryByText('loading');
+  const notLoading = screen.queryByText(/loading/i);
   expect(notLoading).not.toBeInTheDocument();
 
   // confirm order number on confirmation page
@@ -106,4 +106,52 @@ test('Order phases for happy path', async () => {
   // unmount the component explicitly to trigger cleanup and avoid
   // 'not wrapped in act()' error
   unmount();
+});
+
+test('Optional toppings on summary page', async () => {
+  const user = userEvent.setup();
+  // render app
+  // Don't need to wrap in provider; already wrapped!
+  // destructure 'unmount' from return value to use at the end of the test
+  render(<App />);
+
+  const scoopsTotal = screen.getByText('Scoops total: $', { exact: false });
+  expect(scoopsTotal).toHaveTextContent('0.00');
+
+  // this should be async because we get the data from the server
+  const vanillaInput = await screen.findByRole('spinbutton', {
+    name: /vanilla/i,
+  });
+  await user.clear(vanillaInput);
+  await user.type(vanillaInput, '1');
+
+  expect(scoopsTotal).toHaveTextContent('2.00');
+
+  // add then remove toppings
+  const erdbeereCheckbox = await screen.findByRole('checkbox', {
+    name: /erdbeere/i,
+  });
+
+  await user.click(erdbeereCheckbox);
+
+  const toppingsTotal = screen.getByText(/toppings total/i);
+  expect(toppingsTotal).toHaveTextContent('1.50');
+
+  await user.click(erdbeereCheckbox);
+  expect(toppingsTotal).toHaveTextContent('0.00');
+
+  const orderButton = screen.getByRole('button', { name: /order sundae/i });
+  await user.click(orderButton);
+
+  // check for ordersummary
+  const orderSummary = screen.getByText(/ordersummary/i);
+  expect(orderSummary).toBeInTheDocument();
+
+  // check for scoops heading
+  const scoopsHeading = screen.getByRole('heading', { name: /scoops/i });
+  expect(scoopsHeading).toBeInTheDocument();
+
+  // check for toppings is NOT in the document
+  const toppingsHeading = screen.queryByRole('heading', { name: /toppings/i });
+  expect(toppingsHeading).not.toBeInTheDocument();
 });
