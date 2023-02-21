@@ -2,15 +2,22 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import { useOrderDetails } from '../../contexts/OrderDetails';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ScoopOption({ name, imagePath }) {
   const { updateItemCount } = useOrderDetails();
-  const [value, setValue] = useState(0);
+  const [isInvalid, setIsInvalid] = useState(false);
 
   const handleChange = (e) => {
-    updateItemCount(name, parseInt(e.target.value), 'scoops');
-    setValue(e.target.value);
+    const currentValue = e.target.value;
+
+    setIsInvalid(
+      currentValue % 1 > 0 || currentValue >= 10 || currentValue < 0
+    );
+
+    if (!isInvalid) {
+      updateItemCount(name, parseInt(currentValue), 'scoops');
+    }
   };
 
   return (
@@ -30,11 +37,9 @@ export default function ScoopOption({ name, imagePath }) {
         </Form.Label>
         <Col xs='5' style={{ textAlign: 'left' }}>
           <Form.Control
-            className={
-              value % 1 > 0 || value >= 20 || value < 0 ? 'is-invalid' : ' '
-            }
-            value={value}
+            isInvalid={isInvalid}
             type='number'
+            defaultValue={0}
             onChange={handleChange}
           ></Form.Control>
         </Col>

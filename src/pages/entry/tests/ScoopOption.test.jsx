@@ -1,25 +1,36 @@
-import {
-  render,
-  screen,
-  waitFor,
-} from '../../../test-utils/testing-library-utils';
+import { render, screen } from '../../../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 import ScoopOption from '../ScoopOption';
 
 test('Red box for invalid input', async () => {
   const user = userEvent.setup();
 
-  render(<ScoopOption name={'Vanilla'} />);
+  // this will render a normal 'empty' <Option /> component
+  render(<ScoopOption />);
 
-  const vanillaInput = await screen.findByRole('spinbutton', {
-    name: /vanilla/i,
-  });
+  const scoopInput = screen.getByRole('spinbutton');
 
-  await user.clear(vanillaInput);
-  await user.type(vanillaInput, '1.5');
+  // testing decimal input
+  await user.clear(scoopInput);
+  await user.type(scoopInput, '1.5');
 
-  /* const inputField = screen.getByLabelText(/vanilla/i); */
-  console.log(vanillaInput);
+  expect(scoopInput).toHaveClass('is-invalid');
 
-  expect(vanillaInput).toHaveClass('is-invalid');
+  // testing negative input
+  await user.clear(scoopInput);
+  await user.type(scoopInput, '-1');
+
+  expect(scoopInput).toHaveClass('is-invalid');
+
+  // testing to high input
+  await user.clear(scoopInput);
+  await user.type(scoopInput, '11');
+
+  expect(scoopInput).toHaveClass('is-invalid');
+
+  // testing valid input
+  await user.clear(scoopInput);
+  await user.type(scoopInput, '3');
+
+  expect(scoopInput).not.toHaveClass('is-invalid');
 });
