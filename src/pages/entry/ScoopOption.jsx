@@ -1,8 +1,8 @@
+import { useState, useRef, useEffect } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import { useOrderDetails } from '../../contexts/OrderDetails';
-import { useEffect, useState } from 'react';
 
 export default function ScoopOption({ name, imagePath }) {
   const { updateItemCount } = useOrderDetails();
@@ -11,13 +11,22 @@ export default function ScoopOption({ name, imagePath }) {
   const handleChange = (e) => {
     const currentValue = e.target.value;
 
+    const isValidValue =
+      currentValue % 1 === 0 && currentValue < 10 && currentValue >= 0;
+
+    const newValue = isValidValue ? parseInt(currentValue) : 0;
+
     setIsInvalid(
       currentValue % 1 > 0 || currentValue >= 10 || currentValue < 0
     );
 
-    if (!isInvalid) {
+    updateItemCount(name, newValue, 'scoops');
+
+    /*     if (isValidValue) {
       updateItemCount(name, parseInt(currentValue), 'scoops');
-    }
+    } else {
+      updateItemCount(name, parseInt(0), 'scoops');
+    } */
   };
 
   return (
