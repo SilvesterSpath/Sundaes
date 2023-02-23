@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
@@ -21,12 +21,6 @@ export default function ScoopOption({ name, imagePath }) {
     );
 
     updateItemCount(name, newValue, 'scoops');
-
-    /*     if (isValidValue) {
-      updateItemCount(name, parseInt(currentValue), 'scoops');
-    } else {
-      updateItemCount(name, parseInt(0), 'scoops');
-    } */
   };
 
   return (

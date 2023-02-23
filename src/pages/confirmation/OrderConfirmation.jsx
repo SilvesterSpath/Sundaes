@@ -40,7 +40,11 @@ const OrderConfirmation = ({ setOrderPhase }) => {
   };
 
   if (error) {
-    return <AlertBanner />;
+    return (
+      <>
+        <AlertBanner />;<button onClick={handleClick}>New Order</button>
+      </>
+    );
   }
 
   if (orderNumber) {
